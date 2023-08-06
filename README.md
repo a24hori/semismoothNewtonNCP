@@ -1,6 +1,6 @@
 # semismoothNewtonNCP
 
-For a differentiable vector-valued function $F\colon\Bbb^n\to\Bbb^n$, the nonlinear complementarity problem (NCP) is defined as
+For a differentiable vector-valued function $F\colon\mathbb{R}^n\to\mathbb{R}^n$, the nonlinear complementarity problem (NCP) is defined as
 
 $$
 x_i\ge0,\ F_i(x)\ge0,\ x_iF_i(x)=0,\quad i=1,\dots,n.
