@@ -106,7 +106,7 @@ class Solve():
         FBval = self.FBfunc(x,Fval)
         JacFval = self.JacF(x)
         H = self.BsubFBfunc(x,Fval,JacFval)
-        residual = self.meritfunc(x,Fval)
+        meritval = self.meritfunc(x,Fval)
         gradval = self.gradmerit(x,Fval,H)
 
         while num_iter <= self.kmax and np.linalg.norm(gradval) >= self.tol:
@@ -125,7 +125,7 @@ class Solve():
             except:
                 d = -gradval
 
-            if self.meritfunc(x+d,self.F(x+d)) <= self.sigma*residual:
+            if self.meritfunc(x+d,self.F(x+d)) <= self.sigma*meritval:
                 x += d
             else:
                 # sufficient descent direction?
@@ -138,7 +138,7 @@ class Solve():
                 while True:
                     stepsize = self.alpha**m
                     if self.meritfunc(x+stepsize*d, self.F(x+stepsize*d)) <=\
-                            residual + self.beta*stepsize*gradval@d:
+                            meritval + self.beta*stepsize*gradval@d:
                         break
                     else:
                         m += 1
@@ -149,14 +149,15 @@ class Solve():
             FBval = self.FBfunc(x,Fval)
             JacFval = self.JacF(x)
             H = self.BsubFBfunc(x,Fval,JacFval)
-            residual = self.meritfunc(x,Fval)
+            meritval = self.meritfunc(x,Fval)
             gradval = self.gradmerit(x,Fval,H)
+            residual = np.linalg.norm(np.minimum(x,Fval))
 
             if self.verbose==True:
                 print(f"iter: {num_iter}, grad: {np.linalg.norm(gradval)}, residual: {residual}")
 
             num_iter += 1
 
-        residual = self.meritfunc(x,self.F(x))
+        residual = np.linalg.norm(np.minimum(x,Fval))
         gradnorm = np.linalg.norm(self.gradmerit(x,self.F(x),self.JacF(x)))
         return x, residual, gradnorm, num_iter 
